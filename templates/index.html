@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A MULTIMODAL SENTIMENT ANALYSIS OF INTERNET MEMES</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    {% include "sidebar.html" %}
+
+    <div class="content">
+      <h1>Graphs Dashboard</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Bar Chart</div>
+            <div class="card-body">
+              <canvas id="barChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Line Chart</div>
+            <div class="card-body">
+              <canvas id="lineChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Pie Chart</div>
+            <div class="card-body">
+              <canvas id="pieChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Doughnut Chart</div>
+            <div class="card-body">
+              <canvas id="doughnutChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Radar Chart</div>
+            <div class="card-body">
+              <canvas id="radarChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Polar Area Chart</div>
+            <div class="card-body">
+              <canvas id="polarAreaChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Bubble Chart</div>
+            <div class="card-body">
+              <canvas id="bubbleChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header">Scatter Chart</div>
+            <div class="card-body">
+              <canvas id="scatterChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Bar Chart
+      const ctxBar = document.getElementById("barChart").getContext("2d");
+      const barChart = new Chart(ctxBar, {
+        type: "bar",
+        data: {
+          labels: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+          ],
+          datasets: [
+            {
+              label: "Monthly Sales",
+              data: [65, 59, 80, 81, 56, 55, 40],
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Line Chart
+      const ctxLine = document.getElementById("lineChart").getContext("2d");
+      const lineChart = new Chart(ctxLine, {
+        type: "line",
+        data: {
+          labels: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+          ],
+          datasets: [
+            {
+              label: "Website Traffic",
+              data: [30, 40, 50, 60, 70, 80, 90],
+              fill: false,
+              borderColor: "rgba(255, 99, 132, 1)",
+              tension: 0.1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Pie Chart
+      const ctxPie = document.getElementById("pieChart").getContext("2d");
+      const pieChart = new Chart(ctxPie, {
+        type: "pie",
+        data: {
+          labels: ["Red", "Blue", "Yellow"],
+          datasets: [
+            {
+              label: "Colors",
+              data: [300, 50, 100],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+
+      // Doughnut Chart
+      const ctxDoughnut = document
+        .getElementById("doughnutChart")
+        .getContext("2d");
+      const doughnutChart = new Chart(ctxDoughnut, {
+        type: "doughnut",
+        data: {
+          labels: ["Red", "Blue", "Yellow"],
+          datasets: [
+            {
+              label: "Colors",
+              data: [300, 50, 100],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+
+      // Radar Chart
+      const ctxRadar = document.getElementById("radarChart").getContext("2d");
+      const radarChart = new Chart(ctxRadar, {
+        type: "radar",
+        data: {
+          labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding"],
+          datasets: [
+            {
+              label: "Activities",
+              data: [120, 130, 140, 150, 160],
+              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scale: {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Polar Area Chart
+      const ctxPolar = document
+        .getElementById("polarAreaChart")
+        .getContext("2d");
+      const polarAreaChart = new Chart(ctxPolar, {
+        type: "polarArea",
+        data: {
+          labels: ["Red", "Green", "Yellow", "Blue"],
+          datasets: [
+            {
+              label: "Colors",
+              data: [11, 16, 7, 3],
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+
+      // Bubble Chart
+      const ctxBubble = document.getElementById("bubbleChart").getContext("2d");
+      const bubbleChart = new Chart(ctxBubble, {
+        type: "bubble",
+        data: {
+          datasets: [
+            {
+              label: "Bubble Dataset",
+              data: [
+                { x: 10, y: 20, r: 15 },
+                { x: 15, y: 25, r: 10 },
+                { x: 20, y: 15, r: 20 },
+                { x: 25, y: 30, r: 25 },
+              ],
+              backgroundColor: "rgba(75, 192, 192, 0.5)",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              beginAtZero: true,
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Scatter Chart
+      const ctxScatter = document
+        .getElementById("scatterChart")
+        .getContext("2d");
+      const scatterChart = new Chart(ctxScatter, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: "Scatter Dataset",
+              data: [
+                { x: 10, y: 20 },
+                { x: 15, y: 25 },
+                { x: 20, y: 15 },
+                { x: 25, y: 30 },
+              ],
+              backgroundColor: "rgba(255, 99, 132, 0.5)",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              beginAtZero: true,
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

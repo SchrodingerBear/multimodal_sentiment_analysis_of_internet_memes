@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A MULTIMODAL SENTIMENT ANALYSIS OF INTERNET MEMES</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    {% include "sidebar.html" %}
+
+    <div class="content">
+      <h1>Folder Selection and Training Data</h1>
+      <div class="mb-4">
+        <input
+          type="file"
+          id="folderInput"
+          webkitdirectory
+          directory
+          multiple
+        />
+        <button id="trainDataButton" class="btn btn-primary mt-2">
+          Train Data
+        </button>
+      </div>
+      <div id="folderPath" class="mt-3"></div>
+    </div>
+
+    <script>
+      let uploadedFiles = []; // Store uploaded files' names
+
+      // Handle folder selection
+      document
+        .getElementById("folderInput")
+        .addEventListener("change", function (event) {
+          uploadedFiles = Array.from(event.target.files).map(
+            (file) => file.name
+          );
+          const folderPath = uploadedFiles.join("<br>"); // Get full paths of selected files
+          document.getElementById("folderPath").innerHTML =
+            folderPath || "No folder selected";
+        });
+
+      // Train Data button click
+      document
+        .getElementById("trainDataButton")
+        .addEventListener("click", async function () {
+          const { value: folderName } = await Swal.fire({
+            title: "Enter Folder Name",
+            input: "text",
+            inputLabel: "Folder Name",
+            inputPlaceholder: "Enter folder name",
+            showCancelButton: true,
+            allowOutsideClick: false, // Disable outside clicks
+          });
+
+          if (folderName) {
+            const uploadSuccess = await sendDataToBackend(
+              folderName,
+              uploadedFiles
+            );
+            if (uploadSuccess) {
+              await showProcessSteps(); // Proceed to process steps only if upload is successful
+            }
+          }
+        });
+
+      async function showProcessSteps() {
+        const steps = [
+          { title: "Creating OCR Dataset", endpoint: "/trainocr" },
+          { title: "Translating OCR Dataset", endpoint: "/translateocr" },
+          {
+            title: "Creating Sentiment Analysis",
+            endpoint: "/createsentimentanalysis",
+          },
+        ];
+
+        for (let step of steps) {
+          await showStep(step.title, step.endpoint);
+        }
+        Swal.fire("All processes completed!"); // Final completion message
+      }
+
+      async function showStep(stepTitle, endpoint) {
+        // Show the initial SweetAlert
+        Swal.fire({
+          title: stepTitle,
+          html: "Processing... Please wait.",
+          didOpen: () => {
+            Swal.showLoading(); // Show loading animation
+          },
+          allowOutsideClick: false, // Disable outside clicks
+        });
+
+        const response = await fetch(endpoint, { method: "POST" });
+        const data = await response.json();
+
+        // Check for errors in response
+        if (data.status === "error") {
+          Swal.fire("Error", data.message, "error");
+        } else {
+        }
+      }
+
+      async function sendDataToBackend(folderName, uploadedFiles) {
+        if (!folderName || uploadedFiles.length === 0) {
+          Swal.fire("Error", "Please select a folder and files", "error");
+          return false; // Return false to indicate failure
+        }
+
+        const formData = new FormData();
+        formData.append("folderName", folderName);
+
+        // Append each file to the formData
+        uploadedFiles.forEach((file, index) => {
+          formData.append(
+            `files[]`,
+            document.getElementById("folderInput").files[index]
+          );
+        });
+
+        // Send the formData using Fetch API
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+
+        if (data.status === "error") {
+          Swal.fire("Error", data.message, "error");
+          return false; // Return false to indicate failure
+        }
+
+        return true; // Return true to indicate success
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
